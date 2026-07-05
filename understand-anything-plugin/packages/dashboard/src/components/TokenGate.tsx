@@ -22,13 +22,13 @@ export default function TokenGate({ onTokenValid }: TokenGateProps) {
       if (res.ok) {
         onTokenValid(token);
       } else if (res.status === 403) {
-        setError("Invalid token. Please check and try again.");
+        setError("访问令牌无效，请检查后重试。");
       } else {
-        setError(`Unexpected response (${res.status}). Is the dashboard server running?`);
+        setError(`服务返回异常响应 (${res.status})。请确认 Dashboard 服务仍在运行。`);
       }
     } catch (err) {
       setError(
-        `Could not reach the server: ${err instanceof Error ? err.message : String(err)}`
+        `无法连接到 Dashboard 服务：${err instanceof Error ? err.message : String(err)}`
       );
     } finally {
       setLoading(false);
@@ -40,11 +40,10 @@ export default function TokenGate({ onTokenValid }: TokenGateProps) {
       <div className="w-full max-w-md px-8 py-10 bg-surface border border-border-subtle rounded-lg shadow-2xl">
         {/* Heading */}
         <h1 className="font-heading text-2xl text-text-primary tracking-wide text-center mb-2">
-          Access Token Required
+          需要访问令牌
         </h1>
         <p className="text-text-muted text-sm text-center mb-8">
-          Paste the access token from your terminal. Look for the{" "}
-          <span role="img" aria-label="key">&#x1F511;</span> line.
+          请粘贴终端输出中的访问令牌。请查找带钥匙图标的那一行。
         </p>
 
         {/* Form */}
@@ -56,7 +55,7 @@ export default function TokenGate({ onTokenValid }: TokenGateProps) {
               setInput(e.target.value);
               if (error) setError(null);
             }}
-            placeholder="Paste token here..."
+            placeholder="在此粘贴 token..."
             autoFocus
             className="w-full px-4 py-3 bg-elevated border border-border-subtle rounded text-text-primary placeholder:text-text-muted/50 font-mono text-sm focus:outline-none focus:border-accent transition-colors"
           />
@@ -70,7 +69,7 @@ export default function TokenGate({ onTokenValid }: TokenGateProps) {
             disabled={loading || !input.trim()}
             className="w-full py-3 bg-accent text-root font-semibold rounded transition-all hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? "Validating..." : "Continue"}
+            {loading ? "验证中..." : "继续"}
           </button>
         </form>
       </div>

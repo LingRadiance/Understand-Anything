@@ -238,7 +238,7 @@ function KnowledgeGraphViewInner() {
   if (!graph) {
     return (
       <div className="h-full flex items-center justify-center text-text-muted text-sm">
-        No knowledge graph available. Run /understand-knowledge to generate one.
+        暂无可用的知识图谱。请先运行 /understand 生成图谱。
       </div>
     );
   }

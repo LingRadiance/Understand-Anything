@@ -17,7 +17,7 @@ export const zh = {
     truncated: "(已截断)",
     preview: "预览",
     doubleClickToOpen: "双击打开",
-    appName: "Understand Anything",
+    appName: "代码理解图谱",
     pressKeyboard: "按 ? 查看键盘快捷键",
     path: "路径",
     theme: "主题",
@@ -268,7 +268,7 @@ export const zh = {
     title: "查找节点间路径 (P)",
   },
   onboarding: {
-    header: "UNDERSTAND-ANYTHING · 入门",
+    header: "代码理解图谱 · 入门",
     skipForever: "不再显示",
     prev: "上一步",
     next: "下一步",

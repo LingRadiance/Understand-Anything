@@ -278,7 +278,7 @@ function DashboardContent({
         shiftKey: true,
         description: t.keyboardShortcuts.showHelp,
         action: () => setShowKeyboardHelp((prev) => !prev),
-        category: "General",
+        category: t.keyboardShortcuts.general,
       },
       // Navigation
       {
@@ -307,7 +307,7 @@ function DashboardContent({
             setShowKeyboardHelp(false);
           }
         },
-        category: "Navigation",
+        category: t.keyboardShortcuts.navigation,
       },
       {
         key: "/",
@@ -318,7 +318,7 @@ function DashboardContent({
           );
           searchInput?.focus();
         },
-        category: "Navigation",
+        category: t.keyboardShortcuts.navigation,
       },
       // Tour controls
       {
@@ -330,7 +330,7 @@ function DashboardContent({
             state.nextTourStep();
           }
         },
-        category: "Tour",
+        category: t.keyboardShortcuts.tour,
       },
       {
         key: "ArrowLeft",
@@ -341,7 +341,7 @@ function DashboardContent({
             state.prevTourStep();
           }
         },
-        category: "Tour",
+        category: t.keyboardShortcuts.tour,
       },
       // View toggles
       {
@@ -351,7 +351,7 @@ function DashboardContent({
           const state = useDashboardStore.getState();
           state.toggleDiffMode();
         },
-        category: "View",
+        category: t.keyboardShortcuts.view,
       },
       {
         key: "f",
@@ -360,7 +360,7 @@ function DashboardContent({
           const state = useDashboardStore.getState();
           state.toggleFilterPanel();
         },
-        category: "View",
+        category: t.keyboardShortcuts.view,
       },
       {
         key: "e",
@@ -369,7 +369,7 @@ function DashboardContent({
           const state = useDashboardStore.getState();
           state.toggleExportMenu();
         },
-        category: "View",
+        category: t.keyboardShortcuts.view,
       },
       {
         key: "p",
@@ -378,7 +378,7 @@ function DashboardContent({
           const state = useDashboardStore.getState();
           state.togglePathFinder();
         },
-        category: "View",
+        category: t.keyboardShortcuts.view,
       },
     ],
     [t]
@@ -554,7 +554,7 @@ function DashboardContent({
                       ? "border-border-medium bg-elevated text-text-secondary hover:text-text-primary"
                       : "border-transparent bg-transparent text-text-muted/40 line-through hover:text-text-muted"
                   }`}
-                  title={`${nodeTypeFilters[cat.key] !== false ? "Hide" : "Show"} ${cat.label} nodes`}
+                  title={`${nodeTypeFilters[cat.key] !== false ? t.nodeTypeFilter.hide : t.nodeTypeFilter.show} ${cat.label} ${t.nodeTypeFilter.nodesLabel}`}
                 >
                   <span
                     className="w-2 h-2 rounded-full shrink-0"
