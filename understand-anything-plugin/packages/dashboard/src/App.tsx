@@ -115,6 +115,7 @@ function Dashboard({ accessToken }: { accessToken: string }) {
   const [graphIssues, setGraphIssues] = useState<GraphIssue[]>([]);
   const [metaTheme, setMetaTheme] = useState<ThemeConfig | null>(null);
   const [outputLanguage, setOutputLanguage] = useState<string | undefined>();
+  const isZh = (outputLanguage ?? "").toLowerCase().startsWith("zh");
 
   useEffect(() => {
     fetch(dataUrl("meta.json", accessToken))
@@ -152,17 +153,26 @@ function Dashboard({ accessToken }: { accessToken: string }) {
           }
         } else if (result.fatal) {
           console.error("Knowledge graph validation failed:", result.fatal);
-          setLoadError(`Invalid knowledge graph: ${result.fatal}`);
+          setLoadError(
+            isZh ? `知识图谱无效：${result.fatal}` : `Invalid knowledge graph: ${result.fatal}`,
+          );
         } else {
           console.error("Knowledge graph validation failed: unknown error");
-          setLoadError("Invalid knowledge graph: unknown validation error");
+          setLoadError(
+            isZh
+              ? "知识图谱无效：未知校验错误"
+              : "Invalid knowledge graph: unknown validation error",
+          );
         }
       })
       .catch((err) => {
         console.error("Failed to load knowledge graph:", err);
-        setLoadError(`Failed to load knowledge graph: ${err instanceof Error ? err.message : String(err)}`);
+        const message = err instanceof Error ? err.message : String(err);
+        setLoadError(
+          isZh ? `加载知识图谱失败：${message}` : `Failed to load knowledge graph: ${message}`,
+        );
       });
-  }, [setGraph]);
+  }, [setGraph, isZh]);
 
   useEffect(() => {
     fetch(dataUrl("diff-overlay.json", accessToken))

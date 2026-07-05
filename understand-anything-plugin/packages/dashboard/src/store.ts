@@ -339,7 +339,7 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       pendingFocusContainer: null,
     })),
 
-  detailLevel: "file",
+  detailLevel: "class",
   setDetailLevel: (level) =>
     set({
       detailLevel: level,
@@ -352,7 +352,7 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       pendingFocusContainer: null,
     }),
 
-  showFunctionsInClassView: false,
+  showFunctionsInClassView: true,
   toggleShowFunctionsInClassView: () =>
     set((state) => ({
       showFunctionsInClassView: !state.showFunctionsInClassView,

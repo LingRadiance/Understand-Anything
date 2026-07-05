@@ -168,7 +168,7 @@ function DomainGraphViewInner() {
   const domainGraph = useDashboardStore((s) => s.domainGraph);
   const activeDomainId = useDashboardStore((s) => s.activeDomainId);
   const clearActiveDomain = useDashboardStore((s) => s.clearActiveDomain);
-  const { t } = useI18n();
+  const { t, localeKey } = useI18n();
 
   // Build structural nodes/edges/dims synchronously; only the layout call
   // itself is async, so we memo the structural pieces and run ELK in an
@@ -225,7 +225,9 @@ function DomainGraphViewInner() {
   if (!domainGraph) {
     return (
       <div className="h-full flex items-center justify-center text-text-muted text-sm">
-        No domain graph available. Run /understand-domain to generate one.
+        {localeKey === "zh"
+          ? "领域图谱不可用。请运行 /understand-domain 生成。"
+          : "No domain graph available. Run /understand-domain to generate one."}
       </div>
     );
   }

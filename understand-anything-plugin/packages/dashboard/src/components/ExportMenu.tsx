@@ -27,7 +27,23 @@ export default function ExportMenu() {
   const toggleExportMenu = useDashboardStore((s) => s.toggleExportMenu);
   const reactFlowInstance = useDashboardStore((s) => s.reactFlowInstance);
   const persona = useDashboardStore((s) => s.persona);
-  const { t } = useI18n();
+  const { t, localeKey } = useI18n();
+  const zh = localeKey === "zh";
+  const alertCopy = {
+    graphNotReady: zh ? "图谱尚未准备好，无法导出。" : "Graph not ready for export",
+    noNodes: zh ? "没有可导出的节点。" : "No nodes to export",
+    renderPng: zh
+      ? "导出 PNG 失败：无法将图谱渲染为图片。"
+      : "Failed to export PNG: could not render graph as image.",
+    canvas: zh ? "导出 PNG 失败：无法创建画布上下文。" : "Failed to create canvas context",
+    encodePng: zh
+      ? "导出 PNG 失败：图片编码失败。"
+      : "Failed to export PNG: image encoding failed.",
+    noGraph: zh ? "尚未加载图谱。" : "No graph loaded",
+    pngFailed: (message: string) => zh ? `导出 PNG 失败：${message}` : `Failed to export PNG: ${message}`,
+    svgFailed: (message: string) => zh ? `导出 SVG 失败：${message}` : `Failed to export SVG: ${message}`,
+    jsonFailed: (message: string) => zh ? `导出 JSON 失败：${message}` : `Failed to export JSON: ${message}`,
+  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -103,14 +119,14 @@ export default function ExportMenu() {
 
   const exportPNG = async () => {
     if (!reactFlowInstance) {
-      alert("Graph not ready for export");
+      alert(alertCopy.graphNotReady);
       return;
     }
 
     try {
       const result = buildCleanSvg();
       if (!result) {
-        alert("No nodes to export");
+        alert(alertCopy.noNodes);
         return;
       }
 
@@ -121,7 +137,7 @@ export default function ExportMenu() {
       const img = new Image();
       img.onerror = () => {
         URL.revokeObjectURL(url);
-        alert("Failed to export PNG: could not render graph as image.");
+        alert(alertCopy.renderPng);
       };
       img.onload = () => {
         const canvas = document.createElement("canvas");
@@ -130,7 +146,7 @@ export default function ExportMenu() {
         const ctx = canvas.getContext("2d");
         if (!ctx) {
           URL.revokeObjectURL(url);
-          alert("Failed to create canvas context");
+          alert(alertCopy.canvas);
           return;
         }
         ctx.drawImage(img, 0, 0, width * 2, height * 2);
@@ -142,27 +158,27 @@ export default function ExportMenu() {
             downloadBlob(blob, filename);
             toggleExportMenu();
           } else {
-            alert("Failed to export PNG: image encoding failed.");
+            alert(alertCopy.encodePng);
           }
         }, "image/png");
       };
       img.src = url;
     } catch (error) {
       console.error("PNG export failed:", error);
-      alert(`Failed to export PNG: ${error instanceof Error ? error.message : String(error)}`);
+      alert(alertCopy.pngFailed(error instanceof Error ? error.message : String(error)));
     }
   };
 
   const exportSVG = () => {
     if (!reactFlowInstance) {
-      alert("Graph not ready for export");
+      alert(alertCopy.graphNotReady);
       return;
     }
 
     try {
       const result = buildCleanSvg();
       if (!result) {
-        alert("No nodes to export");
+        alert(alertCopy.noNodes);
         return;
       }
 
@@ -172,13 +188,13 @@ export default function ExportMenu() {
       toggleExportMenu();
     } catch (error) {
       console.error("SVG export failed:", error);
-      alert(`Failed to export SVG: ${error instanceof Error ? error.message : String(error)}`);
+      alert(alertCopy.svgFailed(error instanceof Error ? error.message : String(error)));
     }
   };
 
   const exportJSON = () => {
     if (!graph) {
-      alert("No graph loaded");
+      alert(alertCopy.noGraph);
       return;
     }
 
@@ -211,7 +227,7 @@ export default function ExportMenu() {
       toggleExportMenu();
     } catch (error) {
       console.error("JSON export failed:", error);
-      alert(`Failed to export JSON: ${error instanceof Error ? error.message : String(error)}`);
+      alert(alertCopy.jsonFailed(error instanceof Error ? error.message : String(error)));
     }
   };
 

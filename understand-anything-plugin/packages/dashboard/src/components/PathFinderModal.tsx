@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDashboardStore } from "../store";
+import { useI18n } from "../contexts/I18nContext";
 
 interface PathFinderModalProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface PathFinderModalProps {
 export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProps) {
   const graph = useDashboardStore((s) => s.graph);
   const selectNode = useDashboardStore((s) => s.selectNode);
+  const { localeKey } = useI18n();
   const [fromNodeId, setFromNodeId] = useState("");
   const [toNodeId, setToNodeId] = useState("");
   const [path, setPath] = useState<string[] | null>(null);
@@ -44,6 +46,23 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
   }, [isOpen, onClose]);
 
   if (!isOpen || !graph) return null;
+
+  const zh = localeKey === "zh";
+  const copy = {
+    title: zh ? "依赖路径查找" : "Dependency Path Finder",
+    description: zh
+      ? "查找依赖图中两个节点之间的最短路径。"
+      : "Find the shortest path between two nodes in the dependency graph.",
+    fromNode: zh ? "起点节点" : "From Node",
+    toNode: zh ? "终点节点" : "To Node",
+    selectNode: zh ? "选择一个节点..." : "Select a node...",
+    searching: zh ? "查找中..." : "Searching...",
+    findPath: zh ? "查找路径" : "Find Path",
+    noPath: zh ? "这两个节点之间没有可达路径。" : "No path found between these nodes.",
+    pathFound: zh ? "已找到路径" : "Path Found",
+    nodes: zh ? "个节点" : "nodes",
+    close: zh ? "关闭" : "Close",
+  };
 
   const nodes = graph.nodes;
   const edges = graph.edges;
@@ -124,7 +143,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
                 d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
               />
             </svg>
-            <h2 className="font-heading text-xl text-text-primary">Dependency Path Finder</h2>
+            <h2 className="font-heading text-xl text-text-primary">{copy.title}</h2>
           </div>
           <button
             onClick={onClose}
@@ -139,13 +158,13 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
         {/* Body */}
         <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(80vh-180px)]">
           <p className="text-sm text-text-secondary">
-            Find the shortest path between two nodes in the dependency graph.
+            {copy.description}
           </p>
 
           {/* From Node */}
           <div>
             <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
-              From Node
+              {copy.fromNode}
             </label>
             <select
               value={fromNodeId}
@@ -155,7 +174,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
               }}
               className="w-full bg-elevated text-text-primary text-sm rounded-lg px-3 py-2 border border-border-subtle focus:outline-none focus:border-gold/50"
             >
-              <option value="">Select a node...</option>
+              <option value="">{copy.selectNode}</option>
               {nodes.map((node) => (
                 <option key={node.id} value={node.id}>
                   {node.name} ({node.type})
@@ -167,7 +186,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
           {/* To Node */}
           <div>
             <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
-              To Node
+              {copy.toNode}
             </label>
             <select
               value={toNodeId}
@@ -177,7 +196,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
               }}
               className="w-full bg-elevated text-text-primary text-sm rounded-lg px-3 py-2 border border-border-subtle focus:outline-none focus:border-gold/50"
             >
-              <option value="">Select a node...</option>
+              <option value="">{copy.selectNode}</option>
               {nodes.map((node) => (
                 <option key={node.id} value={node.id}>
                   {node.name} ({node.type})
@@ -192,7 +211,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
             disabled={!fromNodeId || !toNodeId || fromNodeId === toNodeId || searching}
             className="w-full bg-gold/10 border border-gold/30 text-gold text-sm font-medium py-2.5 px-4 rounded-lg hover:bg-gold/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {searching ? "Searching..." : "Find Path"}
+            {searching ? copy.searching : copy.findPath}
           </button>
 
           {/* Path Result */}
@@ -213,7 +232,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
                       d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <p className="text-sm text-red-200">No path found between these nodes.</p>
+                  <p className="text-sm text-red-200">{copy.noPath}</p>
                 </div>
               ) : (
                 <div className="bg-elevated border border-border-subtle rounded-lg p-4">
@@ -232,7 +251,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
                       />
                     </svg>
                     <h3 className="text-sm font-semibold text-text-primary">
-                      Path Found ({path.length} nodes)
+                      {copy.pathFound} ({path.length} {copy.nodes})
                     </h3>
                   </div>
                   <div className="space-y-2">
@@ -302,7 +321,7 @@ export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProp
             onClick={onClose}
             className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors"
           >
-            Close
+            {copy.close}
           </button>
         </div>
       </div>

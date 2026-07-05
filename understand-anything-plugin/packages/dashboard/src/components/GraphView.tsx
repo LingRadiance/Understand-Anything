@@ -31,6 +31,7 @@ import type {
   NodeType,
 } from "@understand-anything/core/types";
 import { useTheme } from "../themes/index.ts";
+import { useI18n } from "../contexts/I18nContext";
 import {
   NODE_WIDTH,
   NODE_HEIGHT,
@@ -1297,6 +1298,7 @@ function useLayerDetailGraph() {
 // ── Main inner component (must be inside ReactFlowProvider) ────────────
 
 function GraphViewInner() {
+  const { t, localeKey } = useI18n();
   const graph = useDashboardStore((s) => s.graph);
   const navigationLevel = useDashboardStore((s) => s.navigationLevel);
   const activeLayerId = useDashboardStore((s) => s.activeLayerId);
@@ -1500,7 +1502,7 @@ function GraphViewInner() {
   if (!graph) {
     return (
       <div className="h-full w-full flex items-center justify-center bg-root rounded-lg">
-        <p className="text-text-muted text-sm">No knowledge graph loaded</p>
+        <p className="text-text-muted text-sm">{t.common.noGraphLoaded}</p>
       </div>
     );
   }
@@ -1514,7 +1516,7 @@ function GraphViewInner() {
             onClick={() => setFocusNode(null)}
             className="px-4 py-2 rounded-full bg-elevated border border-gold/30 text-gold text-xs font-semibold tracking-wider uppercase hover:bg-gold/10 transition-colors flex items-center gap-2 shadow-lg"
           >
-            <span>Showing neighborhood</span>
+            <span>{localeKey === "zh" ? "正在显示邻域" : "Showing neighborhood"}</span>
             <span className="text-text-muted">&times;</span>
           </button>
         </div>

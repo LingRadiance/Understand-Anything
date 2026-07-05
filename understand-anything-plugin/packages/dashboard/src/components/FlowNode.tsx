@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import type { Node, NodeProps } from "@xyflow/react";
 import { useDashboardStore } from "../store";
+import { useI18n } from "../contexts/I18nContext";
 
 export interface FlowNodeData extends Record<string, unknown> {
   label: string;
@@ -17,6 +18,8 @@ export type FlowFlowNode = Node<FlowNodeData, "flow-node">;
 function FlowNode({ data }: NodeProps<FlowFlowNode>) {
   const selectNode = useDashboardStore((s) => s.selectNode);
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
+  const { localeKey } = useI18n();
+  const zh = localeKey === "zh";
   const isSelected = selectedNodeId === data.flowId;
 
   return (
@@ -43,7 +46,7 @@ function FlowNode({ data }: NodeProps<FlowFlowNode>) {
         {data.summary}
       </div>
       <div className="text-[9px] text-text-muted mt-1">
-        {data.stepCount} step{data.stepCount !== 1 ? "s" : ""}
+        {zh ? `${data.stepCount} 个步骤` : `${data.stepCount} step${data.stepCount !== 1 ? "s" : ""}`}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export default function LearnPanel() {
   const nextTourStep = useDashboardStore((s) => s.nextTourStep);
   const prevTourStep = useDashboardStore((s) => s.prevTourStep);
   const selectNode = useDashboardStore((s) => s.selectNode);
-  const { t } = useI18n();
+  const { t, localeKey } = useI18n();
 
   const tourSteps = useMemo(
     () => graph?.tour ? [...graph.tour].sort((a, b) => a.order - b.order) : [],
@@ -203,7 +203,7 @@ export default function LearnPanel() {
                   ? "bg-accent"
                   : "bg-elevated hover:bg-surface"
               }`}
-              aria-label={`Go to step ${i + 1}`}
+              aria-label={localeKey === "zh" ? `跳转到第 ${i + 1} 步` : `Go to step ${i + 1}`}
             />
           ))}
         </div>
